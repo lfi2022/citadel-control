@@ -1,0 +1,18 @@
+[Unit]
+Description=Citadel Control API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=citadel
+WorkingDirectory=/opt/citadel-control/backend
+EnvironmentFile=/opt/citadel-control/backend/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
