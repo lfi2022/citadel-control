@@ -40,7 +40,7 @@ function createServer(config = loadConfig()) {
   app.post('/api/services/:domain/:service', { preHandler: secure }, async (request, reply) => {
     const { domain, service } = request.params;
     const entityId = request.body?.entity_id;
-    const permitted = domain === 'light' && ['turn_on', 'turn_off', 'toggle'].includes(service) && allowed.has(entityId);
+    const permitted = ['light', 'switch'].includes(domain) && ['turn_on', 'turn_off', 'toggle'].includes(service) && allowed.has(entityId);
     if (!permitted) return reply.code(403).send({ error: 'Service ou entité non autorisé' });
     try { await ha.service(domain, service, { entity_id: entityId }); return reply.code(202).send({ accepted: true }); }
     catch (error) { request.log.warn({ err: error, entityId }, 'Home Assistant service failed'); return reply.code(502).send({ error: 'Commande Home Assistant refusée ou indisponible' }); }
